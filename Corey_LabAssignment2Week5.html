@@ -6,12 +6,14 @@
 </head>
 <body>
 
-    <input id="freq" type="range" min="1" max="20" value="440"><label id="freqDisplay">Pitch SLider</label>
-    <input id="freq2" type="range" min="1" max="20" value="440"><label id="freq2Display">Pitch SLider2</label>
-    <input id="freq3" type="range" min="1" max="20" value="440"><label id="freq3Display">Pitch SLider3</label>
+    <input id="freq" type="range" min="1" max="20" value="1"><label id="freqDisplay">Pitch SLider</label>
+    <input id="freq2" type="range" min="1" max="20" value="1"><label id="freq2Display">Pitch SLider2</label>
+    <input id="freq3" type="range" min="1" max="20" value="1"><label id="freq3Display">Pitch SLider3</label>
+        <input id="freq4" type="range" min="20" max="1500" value="1"><label id="freq4Display">Slidey Pitch Slider</label>
     <input id="gain" type="range" min="0" max="1" step="0.1" value="0.2"><label id="gainDisplay">Gain Slider</label>
     <input id="gain2" type="range" min="0" max="1" step="0.1" value="0.2"><label id="gain2Display">Gain Slider2</label>
     <input id="gain3" type="range" min="0" max="1" step="0.1" value="0.2"><label id="gain3Display">Gain Slider3</label>
+    <input id="gain4" type="range" min="0" max="1" step="0.1" value="0.2"><label id="gain4Display">Slidey Gain Slider4</label>
     <script>
         const ctx = new AudioContext();
         ctx.suspend();
@@ -37,12 +39,21 @@
         const gain3 = new GainNode(ctx);
         gain3.gain.value = 0.2;
 
+        const gain4 = new GainNode(ctx);
+        gain4.gain.value = 0.2;
+
         osc1.connect(gain);
         osc2.connect(gain2);
         osc3.connect(gain3);
+        const osc4 = new OscillatorNode(ctx);
+        let freq4 = 100;
+        osc4.type = "triangle";
+        osc4.connect(gain4);
         gain.connect(ctx.destination);
         gain2.connect(ctx.destination);
         gain3.connect(ctx.destination);
+        gain4.connect(ctx.destination);
+        osc4.start();
         osc1.start();
         osc2.start();
         osc3.start();
@@ -86,6 +97,18 @@
             ctx.resume();
             gain3.gain.value = Number(slider6.value);
             document.querySelector("#gain3Display").textContent = slider6.value;
+        });
+        const slider7 = document.querySelector("#gain4");
+        slider7.addEventListener("input", () => {
+            ctx.resume();
+            gain4.gain.value = Number(slider7.value);
+            document.querySelector("#gain4Display").textContent = slider7.value;
+        });
+        const slider8 = document.querySelector("#freq4");
+        slider8.addEventListener("input", () => {
+            ctx.resume();
+            osc4.frequency.value = freq4 = Number(slider8.value);
+            document.querySelector("#freq4Display").textContent = slider8.value;
         });
     </script>
 
